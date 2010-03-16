@@ -36,10 +36,12 @@ module MakersMark
     def markup
       @markup ||= begin
         logger.info "WRITING!"
-        t = BlueCloth.new(@markdown.dup).to_html
-        t.gsub!(/^(?:<p>)?@@@(?:<\/p>)?$/, '</div>')
-        t.gsub!(/^(?:<p>)?@@@\s*([\w\+]+)(?:<\/p>)?$/, '<div class="code" rel="\1">')
-        t
+        text = @markdown.dup
+        ### NOTE: preserve code snippets
+        text.gsub!(/^(?:<p>)?@@@(?:<\/p>)?$/, '</div>')
+        text.gsub!(/^(?:<p>)?@@@\s*([\w\+]+)(?:<\/p>)?$/, '<div class="code" rel="\1">')
+        ### NOTE: convert to html and return
+        BlueCloth.new(text).to_html
       end
     end
 
